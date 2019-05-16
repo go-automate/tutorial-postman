@@ -1,0 +1,387 @@
+= API Testing
+:Author: Simon Stratton
+:Version: 0.1
+:imagesdir: images
+:source-highlighter: prettify
+
+:doctype: book
+
+:blank: pass:[ +]
+
+
+== CORE KNOWLEDGE
+{blank}
+image:Clock3.png[Clock, 100, 100] [green]#+ 90 minutes.#
+{blank}
+{blank}
+
+In this exercise we'll be using a tool called `Postman` to test the API calls of our Web App.
+
+We will follow these steps in order to create our `collection` of api tests:
+
+. Record our API calls (in HTTP)
+. Create our tests
+. Parameterize our calls by creating an Environment
+
+== Recording our API calls.
+
+In order to record our API calls, we need to set up our `Postman` application to act as a `proxy` server that sits in between our browser and the internet.
+
+The diagram below describes how this happens at a high level.
+
+{blank}
+
+image:mat_dn_vs_proxy.jpg[Image, 400, 400]
+
+{blank}
+
+You can see that we're routing all our requests through `Postman`, which records them before sending them on to the server. The response is also recorded.
+
+You can also see that we have `Postman` 'listening' on Port 5555 of your computer. Let's set this up now.
+
+{blank}
+*****
+. From the Windows `Start Menu` open up the `Postman` app.
+. Close the `Create New` pop-up that appears by clicking on the `x` in the top right corner.
+. To set up your new proxy, click on the satellite dish icon image:mat_dn_vs_satdish.png[Image, title="Image"]
+in the top right ribbon menu in the app.
+*****
+{blank}
+
+This will open your `Proxy Settings` screen.
+
+image:mat_dn_vs_proxset.png[Image, title="Image"]
+
+You can see that it is set to listen on port 5555 and that any requests will be stored in the `History` panel on the left of your screen.
+
+{blank}
+*****
+. Make sure that your `History` tab is highlighted in orange (as in the image above) and then click on `Connect`.
+. Your `Postman` app is now set up as a proxy server, listening on port 5555.
+*****
+{blank}
+
+Next, we'll us a Chrome Extension called `Switchy Omega` to point our browser at port 5555 of our computer, where `Postman` is listening.
+
+First, we need to ensure that we're sending a request that will call the ToolsList web app API. For this exercise, we'll use the HTTP POST request that creates a new tool in our list.
+
+{blank}
+*****
+. Open up Chrome and navigate to the website:
++
+ http://toolslist.safebear.co.uk:8080
++
+. Login (`tester`, `letmein`) and click on the `New Tool` button at the bottom of the list of tools.
+. In the top-right corner of the Chrome browser, click on the logo for the Switchy Omega extension image:mat_dn_vs_switchyomega.png[Image, title="Image"].
+. Click on `Options`.
+*****
+
+image:mat_dn_vs_sooptions.png[Image, title="Image"]
+
+*****
+. Click on `proxy` from the left-hand menu.
+. Ensure that the `Proxy servers` settings are set to the following:
++
+ Protocol: HTTP
+ Server: localhost
+ Port: 5555
+*****
+image:mat_dn_vs_soproxy.png[Image, title="Image"]
+
+*****
+. Close the Switchy Omega tab and return to your `New Tool` page.
+. Click on the Switchy Omega logo image:mat_dn_vs_switchyomega.png[Image, title="Image"] again in Chrome and this time choose `proxy`.
+*****
+image:mat_dn_vs_sop.png[Image, title="Image"]
+*****
+. Complete the `New Tool` page with the following information (replacing *surname* with your surname):
++
+[subs=+quotes]
+....
+Name: *surname1*
+Use: *surname2*
+Website: *surname3*
+....
++
+. Press `Accept`.
+. Now we've captured our request, we need to stop pointing Switchy Omega at Postman. Click on the Switchy Omega logo image:mat_dn_vs_soactive.png[Image, title="Image"]
+and choose `Direct`.
+*****
+{blank}
+
+Now we've captured our request, we'll set up a test for it in Postman.
+
+{blank}
+*****
+. Return to the Postman app. In the `History` panel, there will be a series of requests.
+. Click on the `POST` request.
+*****
+{blank}
+
+image:mat_dn_vs_postreq.png[Image, title="Image"]
+
+{blank}
+*****
+. The POST request will appear on the main screen. The request will look like:
++
+ http://toolslist.safebear.co.uk:8080/tools
++
+. Click on the `Body` tag. The contents of our `POST` request will look like:
++
+ action=add&idTool=&name=stratton1&use=stratton2&website=stratton3
+*****
+{blank}
+
+image:mat_dn_vs_req.png[Image, title="Image"]
+
+
+You can see that the data we submitted into the form is captured in the `Body` of the `POST` request. Before we start working with this request, we'll save it to a collection and set it up with an environment.
+
+{blank}
+*****
+. Click on the `Headers` tab and untick all the headers except for the `content-type` one.
+. Click on the `Save` button.
+. Scroll to the bottom of the `Save Request` screen and choose `Create Collection`.
+*****
+
+image:mat_dn_vs_savecoll.png[Image, title="Image"]
+
+*****
+. Call your new collection `New Tool`.
+. Click on your `New Tool` collection and click on the `Save to New Tool` button.
+*****
+
+Now we'll set up our `Environment`.
+
+=====
+*What is an `Environment` in Postman?*
+
+An Environment is simply a collection of variables that allow you to parameterise your tests. This allows you to change the domain of your URL into a variable so you can switch between test environments (e.g. between `test.safebear.co.uk` and `preprod.safebear.co.uk`). In this exercise we'll use one to parameterise our body text.
+
+=====
+
+*****
+. Click on the `Manage Environments` icon image:mat_dn_vs_manageenv.png[Image, title="Image"]
+in the top right-hand corner of the request.
+. Click on `Add`.
+. Call the Environment `ToolsList`.
+. Add the following variables:
++
+|===
+|Variable| Initial Value
+
+|name
+|testname
+
+|use
+|testuse
+
+|website
+|www.testwebsite.com
+
+|===
++
+. Click the `Add` button.
+*****
+{blank}
+
+Your environment variables should now look like the following:
+
+image:mat_dn_vs_env.png[Image, title="Image"]
+
+{blank}
+*****
+. Close your `Manage Environments` screen by clicking the `x` in the top right-hand corner.
+. Click on the `No Environment` dropdown and choose `ToolsList`.
+*****
+
+image:mat_dn_vs_postmandd.png[Image, title="Image"]
+
+*****
+. In the `Body` of your request, change `surname1` to `{{name}}`, `surname2` to `{{use}}` and `surname3` to `{{website}}` to use our request variables.
+. Press `save`.
+. Click on the `Headers` tab and uncheck all the headers except the `content-type`.
+. Press `send`.
+. In chrome, navigate to:
++
+ http://toolslist.safebear.co.uk:8080/tools
++
+. You should be able to see your new tool at the bottom of the Tools List.
+*****
+{blank}
+
+Now we'll create a test for our new request.
+
+{blank}
+*****
+. Return to Postman and click on the `Tests` tab under your request.
+. In the `snippets` panel on the right, scroll down until you see `Status code: code is 200` and click on it to add that test.
+*****
+{blank}
+
+image:mat_dn_vs_200.png[Image, title="Image"]
+
+
+That test will check that there are no error responses back from the server and that everything is ok.
+
+Now we'll add a couple of tests to check that our tool was created ok.
+
+{blank}
+*****
+. In the `snippits` panel, click on `Get an environment variable`. At the bottom of the `Tests` screen, the line `pm.environment.get("variable_key");` appears.
+. Replace `variable_key` with `name` as this is the name of our environment variable.
+. Add `var namefield =` in front of this code to catch the contents of this variable. Your code should now look like this:
++
+[source,javascript]
+.Tests.js
+----
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+var namefield = pm.environment.get("name");
+----
++
+. From the `snippets` panel, click on `Response body: Contains String`.
+. Delete `"string_you_want_to_search"` in the code that is added and replace it with `namefield`. Your code should now look like this:
++
+[source,javascript]
+.Tests.js
+----
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+var namefield = pm.environment.get("name");
+
+pm.test("Body matches string", function () {
+    pm.expect(pm.response.text()).to.include(namefield);
+});
+----
++
+. Click `Send` to run the tests.
+. In the `Response` panel at the bottom, click on `Test Results` to see the results of your tests.
+*****
+{blank}
+
+They should all have passed. 
+
+== EXTRA TIME: HTTP Requests
+
+=== What is HTTP?
+
+The Hypertext Transfer Protocol (HTTP) is designed to enable communications between clients and servers.
+
+HTTP works as a request-response protocol between a client and server. A web browser may be the client, and an application on a computer that hosts a web site may be the server.
+
+*Example:* A client (browser) submits an HTTP request to the server; then the server returns a response to the client. The response contains status information about the request and may also contain the requested content.
+
+=== GET and POST
+The two most commonly used methods for a request-response between a client and server are: GET and POST.
+
+*GET* - Requests data from a specified resource
+
+*POST* - Submits data to be processed to a specified resource
+
+=== The GET Method
+
+Note that the query string (name/value pairs) is sent in the URL of a GET request, e.g.:
+
+ www.safebear.co.uk/test/demo_form.php?name1=value1&name2=value2
+
+Some other notes on GET requests:
+
+. GET requests can be cached
+. GET requests remain in the browser history
+. GET requests can be bookmarked
+. GET requests should never be used when dealing with sensitive data
+. GET requests have length restrictions
+. GET requests should be used only to retrieve data
+
+=== The POST Method
+
+Note that the query string (name/value pairs) is sent in the HTTP message body of a POST request, e.g:
+
+ POST /test/demo_form.php HTTP/1.1
+ Host: safebear.co.uk
+ name1=value1&name2=value2
+
+Some other notes on POST requests:
+
+. POST requests are never cached
+. POST requests do not remain in the browser history
+. POST requests cannot be bookmarked
+. POST requests have no restrictions on data length
+
+The following table compares GET and POST requests.
+
+|===
+| |GET |POST
+
+|Back button/ Reload
+|Harmless
+|Data will be resubmitted (the browser will alert the user that the data will be resubmitted)
+
+|Bookmarked
+|Can be bookmarked
+|Cannot be bookmarked
+
+|Cached
+|Can be cached by web servers.
+|Not cached
+
+|Encoding type
+|application/x-www-form-urlencoded
+|application/x-www-form-urlencoded or multipart/form-data. Use multipart encoding for binary data.
+
+|History
+|Parameters remain in browser history
+|Parameters are not saved in browser history
+
+|Restrictions on data length
+|Yes, when sending data, the GET method adds the data to the URL; and the length of a URL is limited to 2048 characters
+|No restrictions
+
+|Restrictions on data type
+|Only ASCII characters allowed
+|No restrictions. Binary data is also allowed
+
+|Security
+|GET is much less secure as data is visible in the URL and cached. Never use GET for usernames and passwords!
+|POST is safer as the parameters are not cached.
+
+|Visibility
+|Data is visible to everyone in the URL
+|Data is not displayed in the URL.
+
+|===
+
+Other HTTP requests you might see:
+|===
+|Request | Description
+
+|HEAD
+|Same as GET but returns only HTTP headers and no document body
+
+|PUT
+|Uploads a representation of the specified URI
+
+|DELETE
+|Deletes the specified resource
+
+|OPTIONS
+|Returns the HTTP methods that the server supports
+
+|CONNECT
+|Converts the request connection to a transparent TCP/IP tunnel
+
+|===
+
+If you want to take a look at some GET and POST requests, press F12 in your browser to open the Developer Options and then click on Network to view all the network messages. Perform some activity in the browser (e.g. Google your name) and then examine the messages that are sent and received from your browser to the server and back again.
+
+=== HTTP Headers
+HTTP headers are "Name: Value" pairs, one on each line. These contain various information about the HTTP request and your browser. For example, the "User-Agent" line provides information on the browser version and the Operating System you are using. "Accept-Encoding" tells the server if your browser can accept compressed output like gzip.
+
+You may notice that the cookie data is also transmitted inside an HTTP header. And if there was a referring URL, that will be in the header too.
+
+Most of these headers are optional, however POST requests that contain data will need a Content-Type: header to tell the API what type of data the post request is carrying (e.g. Content-Type: application/json) and if the session data is contained in a cookie, this will need to be sent also.
