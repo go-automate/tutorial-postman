@@ -1,0 +1,120 @@
+{
+	"info": {
+		"_postman_id": "e8d0392f-d120-4664-9b61-87e9a3dea6e1",
+		"name": "toolslist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://toolslist.safebear.co.uk:8080/tools",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5a28e273-a1e0-4871-b6b5-13078ebf690d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var namefield = pm.environment.get(\"name\"); ",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(namefield);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+						"disabled": true
+					},
+					{
+						"key": "accept-encoding",
+						"value": "gzip, deflate",
+						"disabled": true
+					},
+					{
+						"key": "accept-language",
+						"value": "en-GB,en-US;q=0.9,en;q=0.8",
+						"disabled": true
+					},
+					{
+						"key": "cache-control",
+						"value": "max-age=0",
+						"disabled": true
+					},
+					{
+						"key": "content-length",
+						"value": "72",
+						"disabled": true
+					},
+					{
+						"key": "content-type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "cookie",
+						"value": "__tawkuuid=e::safebear.co.uk::gZGHXcXM3Ucs0l9qcRYPgK+boLFAPiuMSDHfVzIhTc7FUPxRe2PoXxjDRSAzE381::2; JSESSIONID=E55478EB229215EA117E9781FF219C4D",
+						"disabled": true
+					},
+					{
+						"key": "host",
+						"value": "toolslist.safebear.co.uk:8080",
+						"disabled": true
+					},
+					{
+						"key": "origin",
+						"value": "http://toolslist.safebear.co.uk:8080",
+						"disabled": true
+					},
+					{
+						"key": "proxy-connection",
+						"value": "keep-alive",
+						"disabled": true
+					},
+					{
+						"key": "referer",
+						"value": "http://toolslist.safebear.co.uk:8080/jsp/new-tool.jsp?",
+						"disabled": true
+					},
+					{
+						"key": "upgrade-insecure-requests",
+						"value": "1",
+						"disabled": true
+					},
+					{
+						"key": "user-agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "action=add&idTool=&name={{name}}&use={{description}}&website={{website}}"
+				},
+				"url": {
+					"raw": "http://toolslist.safebear.co.uk:8080/tools",
+					"protocol": "http",
+					"host": [
+						"toolslist",
+						"safebear",
+						"co",
+						"uk"
+					],
+					"port": "8080",
+					"path": [
+						"tools"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
