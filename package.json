@@ -1,0 +1,23 @@
+{
+  "name": "tutorial-postman",
+  "version": "1.0.0",
+  "description": "= API Testing :Author: Simon Stratton :Version: 0.1 :imagesdir: images :source-highlighter: prettify",
+  "main": "index.js",
+  "scripts": {
+    "test": "newman run 'toolslist.postman_collection.json' -e 'toolslistenv.postman_environment.json'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/go-automate/tutorial-postman.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/go-automate/tutorial-postman/issues"
+  },
+  "homepage": "https://github.com/go-automate/tutorial-postman#readme",
+  "dependencies": {
+    "newman": "^4.5.0"
+  }
+}
